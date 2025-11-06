@@ -18,6 +18,8 @@
 </header>
 <main>
     <?php
+    global $bdd;
+    require_once "bdd.php";
     // Initialisation des variables
     $nom = $email = $sujet = $message = null;
 
@@ -85,11 +87,19 @@
         // Vérification des champs non vides
         if (!empty($nom) && !empty($email) && !empty($sujet) && !empty($message)) {
 
-            // Affichage du résultat - Première occurrence
-            echo "<h3 class='text-light'> Soumission du formulaire réussie :</h3>";
-            echo "<p class='text-light'>Je m'appelle **$nom**, mon email est **$email**.</p> 
-                  <p class='text-light'>Ma plainte porte sur **$sujet**.</p> 
-                  <p class='text-light'>Contenu : <br> $message</p>";
+            $sql = "INSERT INTO plainte (nom, sujet, message, date_plainte) VALUE (:nom, :sujet, :message, :date_plainte)";
+            $insert = $bdd->prepare($sql);
+            $verif = $insert->execute([
+                    'nom' => $nom,
+                    'sujet' => $sujet,
+                    'message' => $message,
+                    'date_plainte' => date('Y-m-d'),
+            ]);
+            if ($verif) {
+                //echo "<h3>C'est inséré</h3>";
+                header("Location: plainte.php?success=1");
+                exit();
+            }
         } else {
             // Optionnel : Afficher un message d'erreur si des champs sont vides
             echo "<h3 class='text-danger Create selector'>Erreur : Veuillez remplir tous les champs du formulaire.</h3>";
