@@ -6,7 +6,23 @@ $sql = "SELECT * from plainte";
 $query = $bdd->query($sql);
 $plainte = $query->fetchAll();
 
-//echo var_dump($plainte);
+// supprimer une entité :
+if(isset($_GET['id']) && !empty($_GET['id'])){
+// réccupération de mon id
+    $id = $_GET['id'];
+    $sql = "DELETE FROM plainte WHERE id = :id";
+    $query = $bdd->prepare($sql);
+    $verif = $query-> execute([
+            'id'=> $id
+    ]);
+    if ($verif){
+        header("Location: plainte.php");
+//        exit();
+    }
+}
+
+
+
 ?>
 
     <!DOCTYPE html>
@@ -56,7 +72,10 @@ $plainte = $query->fetchAll();
                     <th scope="col">
                             <?php echo ($item['visible'] == 1) ? "<span class='btn btn-success'> visible</span>" : "<span class='btn btn-danger'> invisible</span>"; ?>
                     </th>
-                    <th scope="col">action</th>
+                    <th scope="col">
+                        <a href="plainte.php?id=<?php echo $item['id']; ?>"><span class='btn btn-danger'>Supprimer</span></a>
+                        <a ><span class='btn btn-warning'>Modifier</span></a>
+                    </th>
                 </tr>
             <?php }
             ?>
