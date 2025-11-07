@@ -2,12 +2,9 @@
 global $bdd;
 require_once "bdd.php";
 
-$sql = "SELECT * from plainte";
-$query = $bdd->query($sql);
-$plainte = $query->fetchAll();
-// && $_GET['status'] == supprimer
+
 // supprimer une entité :
-if(isset($_GET['id']) && !empty($_GET['id'])){
+if(isset($_GET['id']) && !empty($_GET['id']) && isset($_GET['action']) && $_GET['action']=='suppression'){
 // réccupération de mon id
     $id = $_GET['id'];
     $sql = "DELETE FROM plainte WHERE id = :id";
@@ -19,11 +16,31 @@ if(isset($_GET['id']) && !empty($_GET['id'])){
         header("Location: plainte.php");
 //        exit();
     }
+
+    if(isset($_GET['id']) && !empty($_GET['id']) && !empty($_GET['visible'] && isset($_GET['action']) && $_GET['action']=='gerervisibilite')) {
+// réccupération de mon id
+        $visible = $_GET['visible'];
+        $id = $_GET['id'];
+        $sql = "UPDATE plainte SET visible = :visible WHERE id = :id";
+        $update = $bdd->prepare($sql);
+        $verif = $update->execute([
+                'id' => $id,
+                'visible' => $visible?0:1,
+        ]);
+        if ($verif) {
+            header("Location: plainte.php");
+//        exit();
+        }
+    }
 }
 // && $_GET['status'] == modifier
 if(isset($_GET['id']) && !empty($_GET['id'])){
     // ecrire le code pourmodifier le status d'une ligne
 }
+$sql = "SELECT * from plainte";
+$query = $bdd->query($sql);
+$plainte = $query->fetchAll();
+// && $_GET['status'] == supprimer
 
 ?>
 
@@ -75,8 +92,9 @@ if(isset($_GET['id']) && !empty($_GET['id'])){
                             <?php echo ($item['visible'] == 1) ? "<span class='btn btn-success'> visible</span>" : "<span class='btn btn-danger'> invisible</span>"; ?>
                     </th>
                     <th scope="col">
-                        <a href="plainte.php?id=<?php echo $item['id']; ?>"><span class='btn btn-danger'>Supprimer</span></a>
-                        <a href="edit_plainte.php?id=<?php echo $item['id']; ?>"><span class='btn btn-warning'>Modifier</span></a>
+                        <a href="plainte.php?id=<?php echo $item['id']; ?>=<?php $item['visible']; ?>"><span class='btn btn-danger'>Supprimer</span></a>
+                        <a href="edit_plainte.php?id=<?php echo $item['id']; ?>"><span class='btn btn-warning'>Editer</span></a>
+                        <a href="plainte.php?id=<?php echo $item['id']; ?>&visible<?php echo $item['visible']; ?>"><span class='btn btn-info'>Visible O/N</span></a>
                     </th>
                 </tr>
             <?php }
@@ -96,6 +114,3 @@ if(isset($_GET['id']) && !empty($_GET['id'])){
     </body>
 
     </html>
-
-<?php
-
