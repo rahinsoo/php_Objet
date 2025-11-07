@@ -5,7 +5,7 @@ require_once "bdd.php";
 $sql = "SELECT * from plainte";
 $query = $bdd->query($sql);
 $plainte = $query->fetchAll();
-
+// && $_GET['status'] == supprimer
 // supprimer une entité :
 if(isset($_GET['id']) && !empty($_GET['id'])){
 // réccupération de mon id
@@ -20,8 +20,10 @@ if(isset($_GET['id']) && !empty($_GET['id'])){
 //        exit();
     }
 }
-
-
+// && $_GET['status'] == modifier
+if(isset($_GET['id']) && !empty($_GET['id'])){
+    // ecrire le code pourmodifier le status d'une ligne
+}
 
 ?>
 
@@ -40,7 +42,7 @@ if(isset($_GET['id']) && !empty($_GET['id'])){
     <body class="bg-dark">
     <header>
         <div class="container text-center">
-            <h1 class="text-light">FOOOOrmuullaiiiire PDO de Plaaaaaaiiintes</h1>
+            <h1 class="text-light">FOOOOrmuullaiiiire Plaaaaaaiiintes PDO</h1>
         </div>
     </header>
     <main>
@@ -74,7 +76,7 @@ if(isset($_GET['id']) && !empty($_GET['id'])){
                     </th>
                     <th scope="col">
                         <a href="plainte.php?id=<?php echo $item['id']; ?>"><span class='btn btn-danger'>Supprimer</span></a>
-                        <a ><span class='btn btn-warning'>Modifier</span></a>
+                        <a href="edit_plainte.php?id=<?php echo $item['id']; ?>"><span class='btn btn-warning'>Modifier</span></a>
                     </th>
                 </tr>
             <?php }
