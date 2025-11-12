@@ -8,15 +8,15 @@ try {
     $sql = "SELECT COUNT(*) as nb_clients FROM CLIENTS";
     $stmt = $bdd->query($sql);
     $nb_clients = $stmt->fetch(PDO::FETCH_ASSOC)['nb_clients'];
-    
+
     // Nombre de factures
     $sql = "SELECT COUNT(*) as nb_factures, SUM(montant) as total_montant FROM FACTURE";
     $stmt = $bdd->query($sql);
     $stats_factures = $stmt->fetch(PDO::FETCH_ASSOC);
     $nb_factures = $stats_factures['nb_factures'];
     $total_montant = $stats_factures['total_montant'] ?? 0;
-    
-} catch(Exception $e) {
+
+} catch (Exception $e) {
     die("Erreur : " . $e->getMessage());
 }
 ?>
@@ -36,7 +36,7 @@ try {
     </div>
 </header>
 <main class="container mt-5">
-    
+
     <!-- Statistiques -->
     <div class="row mb-5">
         <div class="col-md-4">
@@ -64,7 +64,7 @@ try {
             </div>
         </div>
     </div>
-    
+
     <!-- Menu principal -->
     <div class="row">
         <div class="col-md-6 mb-4">
@@ -77,7 +77,7 @@ try {
                 </div>
             </div>
         </div>
-        
+
         <div class="col-md-6 mb-4">
             <div class="card bg-secondary">
                 <div class="card-body">
@@ -89,19 +89,19 @@ try {
             </div>
         </div>
     </div>
-    
+
     <div class="row">
         <div class="col-md-12">
             <div class="card bg-secondary">
                 <div class="card-body">
                     <h5 class="card-title text-light">Recherche avancée (Bonus)</h5>
                     <p class="card-text text-light">Recherchez des factures par client ou par date</p>
-                    <a href="search_factures.php" class="btn btn-warning">Rechercher des factures</a>
+                    <a href="list_factures.php" class="btn btn-warning">Rechercher des factures</a>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <!-- Instructions -->
     <div class="alert alert-light mt-5">
         <h5>Instructions :</h5>

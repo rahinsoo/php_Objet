@@ -1,11 +1,14 @@
-DROP DATABASE IF EXISTS gestion_factures;
+DROP
+DATABASE IF EXISTS gestion_factures;
 
 ----------------------------------
 --- création de Base de donnée ---
 ----------------------------------
 
-CREATE DATABASE gestion_factures;
-USE gestion_factures;
+CREATE
+DATABASE gestion_factures;
+USE
+gestion_factures;
 
 -------------------------
 --- création de table ---
@@ -28,3 +31,10 @@ CREATE TABLE FACTURE
     id_client  INT            NOT NULL,
     FOREIGN KEY (id_client) REFERENCES CLIENTS (id_client) ON DELETE CASCADE
 );
+
+--------------------------
+--- création de nouvelles colonnes ---
+--------------------------
+
+ALTER TABLE `FACTURE`
+    ADD `date_facture` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `quantite`;

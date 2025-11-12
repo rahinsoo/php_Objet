@@ -15,7 +15,7 @@ try {
     $sql = "DELETE FROM FACTURE WHERE id_facture = :id";
     $stmt = $bdd->prepare($sql);
     $verif = $stmt->execute(['id' => $id_facture]);
-    
+
     if ($verif) {
         // Redirection avec message de succès
         header("Location: list_factures.php?deleted=1");
@@ -24,7 +24,7 @@ try {
         header("Location: list_factures.php?error=1");
         exit();
     }
-} catch(Exception $e) {
+} catch (Exception $e) {
     die("Erreur lors de la suppression : " . $e->getMessage());
 }
 ?>
