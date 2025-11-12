@@ -167,7 +167,7 @@ try {
                         <td><?php echo htmlspecialchars($facture['nom'] . ' ' . $facture['prenom']); ?></td>
                         <td><?php echo htmlspecialchars(substr($facture['produits'], 0, 50)) . (strlen($facture['produits']) > 50 ? '...' : ''); ?></td>
                         <td><?php echo htmlspecialchars($facture['quantite']); ?></td>
-                        <td><?php echo date('d-m-Y', strtotime($facture['date_facture'])); ?></td>
+                        <td><?php echo htmlspecialchars($facture['date_facture']); ?></td>
                         <td><?php echo number_format($facture['montant'], 2, ',', ' '); ?> €</td>
                         <td>
                             <a href="edit_facture.php?id=<?php echo $facture['id_facture']; ?>"
@@ -181,7 +181,7 @@ try {
                 </tbody>
                 <tfoot>
                 <tr class="table-info">
-                    <td colspan="5" class="text-end"><strong>Total :</strong></td>
+                    <td colspan="4" class="text-end"><strong>Total :</strong></td>
                     <td colspan="2"><strong><?php echo number_format($total, 2, ',', ' '); ?> €</strong></td>
                 </tr>
                 </tfoot>

@@ -1,6 +1,12 @@
 <?php
 global $bdd;
 require_once "bdd.php";
+// se déconnecter
+if (isset($_COOKIE["user_connected"]) && !empty($_COOKIE["user_connected"]) && isset($_GET['action']) == "logout") {
+    // je détruit mon cookie
+    setcookie("user_connected", null, time() - 3600);
+    header("Location: plainte.php");
+}
 
 // Supprimer une entité
 if (isset($_GET['id']) && !empty($_GET['id']) && isset($_GET['action']) && $_GET['action'] == 'supprimer') {
@@ -35,15 +41,15 @@ if (isset($_GET['id']) && !empty($_GET['id']) && isset($_GET['visible']) && isse
         exit();
     }
 }
-if(isset($_GET['id_selected'])){
+if (isset($_GET['id_selected'])) {
     $id_selected = $_GET['id_selected'];
     // vérifiez si la table n'est pas vide
-    if(count($id_selected) > 0 ){
-$sql = "DELETE FROM plainte WHERE id = :id";
-$query = $bdd->prepare($sql);
+    if (count($id_selected) > 0) {
+        $sql = "DELETE FROM plainte WHERE id = :id";
+        $query = $bdd->prepare($sql);
 
 // Suppression des id
-        foreach ($id_selected as $id_s){
+        foreach ($id_selected as $id_s) {
             $query->execute([
                     'id' => $id_s // valeur actuelle
             ]);
@@ -78,6 +84,13 @@ $plainte = $query->fetchAll();
     <a href="formulaire.php">
         <button type="button" class="btn btn-outline-secondary ">FOOORRRRMMMUUUULLLLAAAIIREEEEE</button>
     </a>
+    <?php if ($_COOKIE["user_connected"] !== null && !empty($_COOKIE["user_connected"])) { ?>
+        <a href="plainte.php?action=logout" class="btn btn-outline-danger ">se déconnecter
+        </a>
+    <?php } else { ?>
+        <a href="connexion.php" class="btn btn-outline-secondary ">COOONNNNECTION
+        </a>
+    <?php } ?>
     <form action="plainte.php" method="GET">
         <div class="form-group">
             <button type="submit" class="btn btn-outline-danger">Check SUUUUPPPRRRREEESSSSIIIIOOOOONN</button>
@@ -92,7 +105,9 @@ $plainte = $query->fetchAll();
                 <th scope="col">message</th>
                 <th scope="col">date plainte</th>
                 <th scope="col">status</th>
-                <th scope="col">action</th>
+                <?php if (isset($_COOKIE["user_connected"]) && !empty($_COOKIE["user_connected"])){?>
+                    <th scope="col">action</th>
+                <?php } ?>
             </tr>
             </thead>
             <tbody>
@@ -108,17 +123,20 @@ $plainte = $query->fetchAll();
                     <th scope="col">
                         <?php echo ($item['visible'] == 1) ? "<span class='btn btn-success'> visible</span>" : "<span class='btn btn-danger'> invisible</span>"; ?>
                     </th>
-                    <th scope="col">
-                        <a href="plainte.php?id=<?php echo $item['id']; ?>&action=supprimer">
-                            <span class='btn btn-danger'>Supprimer</span>
-                        </a>
-                        <a href="edit_plainte.php?id=<?php echo $item['id']; ?>">
-                            <span class='btn btn-warning'>Editer</span>
-                        </a>
-                        <a href="plainte.php?id=<?php echo $item['id']; ?>&visible=<?php echo $item['visible']; ?>&action=gerervisibilite">
-                            <span class='btn btn-info'>Visible O/N</span>
-                        </a>
-                    </th>
+                    <?php if (isset($_COOKIE["user_connected"]) && !empty($_COOKIE["user_connected"])){?>
+                        <th scope="col">
+                            <a href="plainte.php?id=<?php echo $item['id']; ?>&action=supprimer">
+                                <span class='btn btn-danger'>Supprimer</span>
+                            </a>
+                            <a href="edit_plainte.php?id=<?php echo $item['id']; ?>">
+                                <span class='btn btn-warning'>Editer</span>
+                            </a>
+                            <a href="plainte.php?id=<?php echo $item['id']; ?>&visible=<?php echo $item['visible']; ?>&action=gerervisibilite">
+                                <span class='btn btn-info'>Visible O/N</span>
+                            </a>
+                        </th>
+                    <?php }?>
+
                 </tr>
             <?php }
             ?>

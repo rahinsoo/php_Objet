@@ -70,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <main class="container mt-4">
 
     <div class="mb-3">
+    
         <a href="index.php" class="btn btn-light">Gestion des factures</a>
         <a href="list_clients.php" class="btn btn-secondary">Voir la liste des clients</a>
         <a href="add_facture.php" class="btn btn-info">Créer une facture</a>

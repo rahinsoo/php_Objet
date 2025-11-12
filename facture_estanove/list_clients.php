@@ -10,6 +10,19 @@ try {
 } catch (Exception $e) {
     die("Erreur lors de la récupération des clients : " . $e->getMessage());
 }
+
+// 1. D'ABORD récupérer les infos via l'id_client
+if (isset($_GET['id_client']) && !empty($_GET['id_client'])) {
+    $id = $_GET['id_client'];
+    $sql = "SELECT * FROM CLIENTS WHERE id = :id_client";
+    $query = $bdd->prepare($sql);
+    $query->execute(['id_client' => $id]);
+    $client = $query->fetch();
+} else {
+    echo "<h1>Erreur : ID manquant</h1>";
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -49,6 +62,7 @@ try {
                     <th>Sexe</th>
                     <th>Date de naissance</th>
                     <th>Âge</th>
+                    <th>Créer facture</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -65,6 +79,7 @@ try {
                         <td><?php echo htmlspecialchars($client['sexe']); ?></td>
                         <td><?php echo date('d/m/Y', strtotime($client['date_naissance'])); ?></td>
                         <td><?php echo $age; ?> ans</td>
+                        <td><a href="add_facture.php?id=<?php echo $client['id_client']; ?>" class="btn btn-info">Créer facture</a></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
