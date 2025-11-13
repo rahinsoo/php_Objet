@@ -1,16 +1,45 @@
 <?php
+global $bdd;
+require_once "bdd.php";
+
+
 // empecher l'user connecté  d'avoir accès à la page de connection
-if (isset($_COOKIE["user_connected"]) && !empty($_COOKIE["user_connected"])){
-    header("Location: plainte.php");
-}
+//if (isset($_COOKIE["uviser_connected"]) && !empty($_COOKIE["user_connected"])) {
+//    header("Location: plainte.php");
+//}
+
 //Traitement de la page de connexion
-if(isset($_POST['mail']) && isset($_POST['password'])){
+if (isset($_POST['mail']) && isset($_POST['password'])) {
     $email = $_POST['mail'];
     $password = $_POST['password'];
 
-    if (!empty($email) && !empty($password) && $email == "test@test" && $password =="0000"){
-        setcookie("user_connected", $email, time()+3600);
-        header("Location: plainte.php");
+    if (!empty($email) && !empty($password) && $email == "test@test" && $password == "0000") {
+        /**
+         * verifier dans la bdd si le mail et le password est confirmé à une même ligne
+         */
+        $sql = "SELECT * FROM admin WHERE email = :email and password = :password";
+        $query = $bdd->prepare($sql);
+        $admin = $query->execute([
+                'email'=> $email,
+                'password'=> $password
+        ]);
+
+        $admin = $query->fetch();
+
+        if (!empty($admin)) {
+            setcookie("user_connected", $email, time()+3600);
+            setcookie("user_infos", $admin['nom'] . " " . $admin['prenom'], time()+3600);
+
+            // création de la _SESSION
+            session_start();
+            $_SESSION['admin'] = $admin;
+            $_SESSION['welcome_msg'] = "Bienvenue maitre ".$admin['nom'];
+
+            //une fois le cookie créé je le redirige sur la page d'accueil (liste des plaintes)
+            header('Location: plainte.php');
+            //ok la personne est connecté
+        }
+
     }
 }
 

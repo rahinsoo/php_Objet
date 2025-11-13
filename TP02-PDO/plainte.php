@@ -1,12 +1,18 @@
 <?php
 global $bdd;
 require_once "bdd.php";
+
+// ouvrir la session --> qui permet de réccupérer les données de la page connexion.php
+session_start();
+
 // se déconnecter
 if (isset($_COOKIE["user_connected"]) && !empty($_COOKIE["user_connected"]) && isset($_GET['action']) == "logout") {
     // je détruit mon cookie
     setcookie("user_connected", null, time() - 3600);
+    session_destroy();
     header("Location: plainte.php");
 }
+
 
 // Supprimer une entité
 if (isset($_GET['id']) && !empty($_GET['id']) && isset($_GET['action']) && $_GET['action'] == 'supprimer') {
@@ -78,6 +84,12 @@ $plainte = $query->fetchAll();
 <header>
     <div class="container text-center">
         <h1 class="text-light">FOOOOrmuullaiiiire Plaaaaaaiiintes PDO</h1>
+        <?php
+        //affichage connecté en admin
+        if (isset($_SESSION['welcome_msg']) && !empty($_SESSION['welcome_msg'])) {
+            echo "<h3 class='text-secondary'>" . $_SESSION['welcome_msg'] . "</h3>";
+        }
+        ?>
     </div>
 </header>
 <main>
@@ -105,7 +117,7 @@ $plainte = $query->fetchAll();
                 <th scope="col">message</th>
                 <th scope="col">date plainte</th>
                 <th scope="col">status</th>
-                <?php if (isset($_COOKIE["user_connected"]) && !empty($_COOKIE["user_connected"])){?>
+                <?php if (isset($_COOKIE["user_connected"]) && !empty($_COOKIE["user_connected"])) { ?>
                     <th scope="col">action</th>
                 <?php } ?>
             </tr>
@@ -123,7 +135,7 @@ $plainte = $query->fetchAll();
                     <th scope="col">
                         <?php echo ($item['visible'] == 1) ? "<span class='btn btn-success'> visible</span>" : "<span class='btn btn-danger'> invisible</span>"; ?>
                     </th>
-                    <?php if (isset($_COOKIE["user_connected"]) && !empty($_COOKIE["user_connected"])){?>
+                    <?php if (isset($_COOKIE["user_connected"]) && !empty($_COOKIE["user_connected"])) { ?>
                         <th scope="col">
                             <a href="plainte.php?id=<?php echo $item['id']; ?>&action=supprimer">
                                 <span class='btn btn-danger'>Supprimer</span>
@@ -135,7 +147,7 @@ $plainte = $query->fetchAll();
                                 <span class='btn btn-info'>Visible O/N</span>
                             </a>
                         </th>
-                    <?php }?>
+                    <?php } ?>
 
                 </tr>
             <?php }
