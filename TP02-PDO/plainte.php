@@ -93,20 +93,36 @@ $plainte = $query->fetchAll();
     </div>
 </header>
 <main>
-    <a href="formulaire.php">
-        <button type="button" class="btn btn-outline-secondary ">FOOORRRRMMMUUUULLLLAAAIIREEEEE</button>
-    </a>
-    <?php if ($_COOKIE["user_connected"] !== null && !empty($_COOKIE["user_connected"])) { ?>
-        <a href="plainte.php?action=logout" class="btn btn-outline-danger ">se déconnecter
-        </a>
-    <?php } else { ?>
-        <a href="connexion.php" class="btn btn-outline-secondary ">COOONNNNECTION
-        </a>
-    <?php } ?>
-    <form action="plainte.php" method="GET">
-        <div class="form-group">
-            <button type="submit" class="btn btn-outline-danger">Check SUUUUPPPRRRREEESSSSIIIIOOOOONN</button>
+    <div class="d-flex justify-content-between">
+        <div>
+            <a href="formulaire.php">
+                <button type="button" class="btn btn-outline-secondary ">FOOORRRRMMMUUUULLLLAAAIIREEEEE</button>
+            </a>
         </div>
+        <?php if (isset($_COOKIE["user_connected"]) && !empty($_COOKIE["user_connected"])) { ?>
+        <div>
+            <a href="profil_file.php" class="btn btn-outline-danger ">mon compte
+            </a>
+        </div>
+            <div>
+                <a href="plainte.php?action=logout" class="btn btn-outline-danger ">se déconnecter
+                </a>
+            </div>
+        <?php } else { ?>
+        <div>
+            <a href="connexion.php" class="btn btn-outline-secondary ">COOONNNNECTION
+            </a>
+        </div>
+        <?php } ?>
+    </div>
+
+
+        <form class="p-2" action="plainte.php" method="GET">
+            <div class="form-group p-2">
+                <button type="submit" class="btn btn-outline-danger">Check SUUUUPPPRRRREEESSSSIIIIOOOOONN</button>
+            </div>
+
+
         <table class="table">
             <thead>
             <tr>
