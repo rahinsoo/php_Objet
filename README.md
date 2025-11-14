@@ -1,2 +1,2 @@
 # php_Objet
--> test git opt/lammp/htdoc
+-> test git opt/lampp/htdoc
